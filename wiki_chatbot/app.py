@@ -9,12 +9,13 @@ import pysqlite3
 sys.modules["sqlite3"] = pysqlite3
 sys.modules["sqlite3.dbapi2"] = pysqlite3
 
-# パスを追加
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
 # 以降は普段どおり
+import os
 import sqlite3
 import streamlit as st
+
+# パスを追加
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from config.web_settings import WebConfig, initialize_web_config
 from utils.chatbot import WikiChatbot
