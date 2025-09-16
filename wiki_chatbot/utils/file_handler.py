@@ -213,3 +213,26 @@ class FileHandler:
             "html": "HTMLファイル",
             "csv": "CSVファイル",
         }
+
+    def save_uploaded_file(self, uploaded_file, product_name: str):
+        """🛡️ 永続化対応アップロードファイル保存"""
+        # 永続化システムを読み込み
+        from config.persistent_storage import persistent_storage
+    
+        # ステップ1: ファイルを永続化保存
+        saved_path = persistent_storage.save_uploaded_file(uploaded_file, product_name)
+    
+        if saved_path:
+            # ステップ2: RAGシステムに登録（検索できるようにする）
+            success = self.rag_manager.add_document(
+                file_path=saved_path,
+                product_name=product_name
+            )
+    
+            if success:
+                st.success(f"✅ {uploaded_file.name} を永続化しました！")
+                st.info(f"📁 保存場所: {saved_path}")
+                return True
+    
+        st.error("❌ ファイルの永続化に失敗しました")
+        return False
