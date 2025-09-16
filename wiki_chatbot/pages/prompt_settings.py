@@ -14,6 +14,13 @@ from utils.session_manager import SessionManager
 
 def show_prompt_settings():
     """プロンプト設定画面のメイン関数"""
+    # セッション管理初期化
+    SessionManager.initialize_session()
+
+    # 認証チェック
+    if not SessionManager.check_authentication():
+        if not SessionManager.authenticate_user():
+            return
 
     st.title("🎯 プロンプト設定管理")
     st.write("外部設定ファイルによるプロンプト管理システム")
@@ -374,13 +381,6 @@ def show_config_validation():
 
 
 def show_config_export():
-    # セッション管理初期化
-    SessionManager.initialize_session()
-
-    # 認証チェック
-    if not SessionManager.check_authentication():
-        if not SessionManager.authenticate_user():
-            return
     
     """設定エクスポート機能"""
 
