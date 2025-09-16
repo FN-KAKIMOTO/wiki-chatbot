@@ -164,8 +164,9 @@ class SessionManager:
     def authenticate_user() -> bool:
         """ユーザー認証プロセスを処理する。
 
-        認証フォームを表示し、設定された管理者パスワードに対して
-        ユーザーの資格情報を検証します。
+        認証フォームを表示し、@farmnote.jpドメインのメールアドレスと
+        共通パスワードでユーザーの資格情報を検証します。
+
 
         Returns:
             認証が成功または不要な場合はTrue、
@@ -177,15 +178,22 @@ class SessionManager:
             return True
 
         st.title("🔐 認証が必要です")
+        st.write("@farmnote.jpのメールアドレスでログインしてください")
 
         with st.form("auth_form"):
+            email = st.text_input("メールアドレス", placeholder="your-name@farmnote.jp")
             password = st.text_input("パスワード", type="password")
             submitted = st.form_submit_button("ログイン")
 
             if submitted:
-                if password == security_config["admin_password"]:
+                # メールアドレスのドメインチェック
+                if not email.endswith("@farmnote.jp"):
+                    st.error("❌ @farmnote.jpのメールアドレスを入力してください")
+                    return False
+                    
+                if password == os.getenv("SHARED_PASSWORD"):
                     st.session_state.authenticated = True
-                    st.session_state.user_id = "admin"
+                    st.session_state.user_id = email.split("@")[0]  # メールアドレスの@より前の部分をユーザーIDとして使用
                     st.session_state.session_start_time = time.time()
                     st.success("✅ 認証成功")
                     st.rerun()
@@ -298,7 +306,8 @@ class SessionManager:
 
             # ユーザー情報
             if session_info["authenticated"]:
-                st.success(f"👤 ユーザー: {session_info['user_id']}")
+                user_email = st.session_state.get("user_email", f"{session_info['user_id']}@farmnote.jp")
+                st.success(f"👤 ユーザー: {user_email}")
             else:
                 st.info("👤 匿名ユーザー")
 
