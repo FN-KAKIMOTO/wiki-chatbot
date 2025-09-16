@@ -3,13 +3,17 @@
 このモジュールはWiki Chatbotアプリケーションのメインウェブインターフェースを提供し、
 認証、ナビゲーション、コアチャット機能を含みます。
 """
-
-import os
+# --- 最初の数行に置く（streamlit run される一番最初のスクリプトで）---
 import sys
+import pysqlite3
+sys.modules["sqlite3"] = pysqlite3
+sys.modules["sqlite3.dbapi2"] = pysqlite3
 
 # パスを追加
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
+# 以降は普段どおり
+import sqlite3
 import streamlit as st
 
 from config.web_settings import WebConfig, initialize_web_config
