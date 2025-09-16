@@ -8,6 +8,8 @@ import yaml
 import os
 from typing import Dict, Any, List
 from utils.prompt_manager import prompt_manager
+from utils.session_manager import SessionManager
+
 
 
 def show_prompt_settings():
@@ -372,6 +374,14 @@ def show_config_validation():
 
 
 def show_config_export():
+    # セッション管理初期化
+    SessionManager.initialize_session()
+
+    # 認証チェック
+    if not SessionManager.check_authentication():
+        if not SessionManager.authenticate_user():
+            return
+    
     """設定エクスポート機能"""
 
     st.subheader("📤 設定エクスポート")
