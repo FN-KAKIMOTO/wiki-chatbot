@@ -12,6 +12,7 @@ langchain-openai>=0.0.2
 langchain-community>=0.0.12
 
 # Vector Database
+pysqlite3-binary>=0.5.4
 chromadb>=0.4.15
 
 # Document Processing
