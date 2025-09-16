@@ -105,7 +105,7 @@ class WebConfig:
             認証、セッション、セキュリティ設定を含む辞書。
         """
         return {
-            "require_auth": os.getenv("REQUIRE_AUTH", "false").lower() == "true",
+            "require_auth": os.getenv("REQUIRE_AUTH", "true").lower() == "true",
             "admin_password": WebConfig.get_api_key("ADMIN_PASSWORD"),
             "secret_key": WebConfig.get_api_key("SECRET_KEY") or "default-secret-key",
             "session_timeout": int(os.getenv("SESSION_TIMEOUT", "3600")),  # 1時間
