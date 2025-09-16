@@ -62,6 +62,7 @@ from typing import Dict, Any
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config.settings import settings, update_session_settings
+from utils.session_manager import SessionManager
 from utils.llm_manager import llm_manager
 
 
@@ -485,6 +486,14 @@ export {env_var}="your-api-key-here"
 
 
 def main():
+    # セッション管理初期化
+    SessionManager.initialize_session()
+
+    # 認証チェック
+    if not SessionManager.check_authentication():
+        if not SessionManager.authenticate_user():
+            return
+
     """設定画面メイン"""
     st.set_page_config(page_title="設定 - Wiki Chatbot", page_icon="⚙️", layout="wide")
 
