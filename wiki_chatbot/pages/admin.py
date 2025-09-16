@@ -57,6 +57,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from utils.file_handler import FileHandler
 from utils.feedback_manager import feedback_manager
+from utils.session_manager import SessionManager
+
 
 
 def main():
@@ -85,6 +87,12 @@ def main():
         この関数は管理画面全体の制御フローを管理し、
         各個別機能は専用の関数に委譲されます。
     """
+    # セッション管理初期化
+    SessionManager.initialize_session()
+    # 認証チェック
+    if not SessionManager.check_authentication():
+        if not SessionManager.authenticate_user():
+            return
     st.set_page_config(page_title="管理画面 - Wiki Chatbot", page_icon="🛠️", layout="wide")
 
     # サイドバーの構築
